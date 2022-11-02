@@ -7,6 +7,7 @@ const { default: inquirer } = require('inquirer');
 // empty arrays for use when adding new roles and arrays later
 const rolesArr = [];
 const employeesArr = [];
+const deptArr = [];
 
 // connect to the mysql database
 const connection = mysql.createConnection({
@@ -211,6 +212,62 @@ const addRole = () => {
             });
     });
 }
+
+// update a specific employee's role in the database, creating a table to reflect the change
+const updateEmployeeRole = () => {
+    inquirer.prompt([ // prompt that asks user to choose an employee, and what role that employee will be given
+        {
+            type: 'list',
+            message: 'Which Employee would you like to update?',
+            choices: employeesArr,
+            name: 'employee'
+        },
+        {
+            type: 'list',
+            message: 'What will the new Role be?',
+            choices: rolesArr,
+            name: 'newRole'
+        }
+    ]).then((answers) => {
+        connection.query(`UPDATE role SET title = ? WHERE first_name = ?`, // insert information from prompt into new table
+            {
+                title: answers.newRole,
+                first_name: answers.employee
+            },
+            (err) => {
+                if (err) throw err; // checks for error first
+                console.log("Updated Employee's Role");
+                console.table(answers); // generates visible table from data gathered
+                employeeTracker(); // returns back to available choices
+            });
+    });
+}
+
+// set up arrays for updateEmployeeRole and newEmployee
+employeesArr = [];
+const query = 'SELECT employee.first_name';
+connection.query(query, (err, res) => {
+    if (err) throw err;
+    res.forEach(({ first_name }) => {
+        employeesArr.push(first_name);
+    });
+});
+rolesArr = [];
+const query2 = `SELECT role.title`
+connection.query(query2, (err, res) => {
+    if (err) throw err;
+    res.forEach(({ title }) => {
+        rolesArr.push(title);
+    });
+});
+deptArr = [];
+const query3 = `SELECT department.name`
+connection.query(query3, (err, res) => {
+    if (err) throw err;
+    res.forEach(({ name }) => {
+        rolesArr.push(name);
+    });
+});
 
 // automatically opens up the employee tracker application upon starting
 employeeTracker();
