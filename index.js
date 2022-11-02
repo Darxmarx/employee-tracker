@@ -153,5 +153,27 @@ const addEmployee = () => {
     });
 }
 
+// add a new department to the database and generate a new department table to reflect change
+const addDepartment = () => {
+    inquirer.prompt([ // prompt that asks user to create a department
+        {
+            type: 'input',
+            message: 'What Department will you add?',
+            name: 'newDepartment'
+        }
+    ]).then((answers) => {
+        connection.query(`INSERT INTO department SET ?`, // insert information from prompt into department table
+            {
+                name: answers.newDepartment
+            },
+            (err) => {
+                if (err) throw err; // checks for error first
+                console.log('Added new Department');
+                console.table(answers); // generates visible table from data gathered
+                employeeTracker(); // returns back to available choices
+            });
+    });
+}
+
 // automatically opens up the employee tracker application upon starting
 employeeTracker();
