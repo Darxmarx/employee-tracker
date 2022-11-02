@@ -23,7 +23,7 @@
 
   ## Usage
 
-  Using this application, a user may easily generate a handy database of information all from the comfort of the command-line. Upon starting up the application, the user is presented with options to view all employees, view departments, view roles, add an employee, add a department, add a role, and update an employee role. 
+  Using this application, a user may easily generate a handy database of information all from the comfort of the command-line. Upon starting up the application, the user is presented with options to view all employees, view departments, view roles, add an employee, add a department, add a role, and update an employee role. After selecting any of the prompts, the user is brought through a helpful guide to modify the database as they see fit, and are then presented with a simple, legible table containing all of their hard-gathered data.
 
   ## Preview
 
