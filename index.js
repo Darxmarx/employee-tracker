@@ -32,5 +32,36 @@ const employeeTracker = () => {
                 'Exit'
             ]
         }
-    ])
+    ]).then((answer) => { // after user selects an answer from available choices...
+        switch (answer.employeeChoice) {
+            // plays out specific functions based on which answer was chosen
+            case 'View all Employees':
+                viewEmployees();
+                break;
+
+            case 'View Departments':
+                viewDepartments();
+                break;
+
+            case 'View Roles':
+                viewRoles();
+                break;
+
+            case 'Add an Employee':
+                addEmployee();
+                break;
+
+            case 'Add a Department':
+                addDepartment();
+                break;
+
+            case 'Add a Role':
+                addRole();
+                break;
+
+            case 'Update an Employee Role':
+                updateEmployeeRole();
+                break;
+        }
+    });
 }
