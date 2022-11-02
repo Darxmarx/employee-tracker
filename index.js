@@ -4,6 +4,10 @@ const mysql = require('mysql2');
 const cTable = require('console.table');
 const { default: inquirer } = require('inquirer');
 
+// empty arrays for use when adding new roles and arrays later
+const rolesArr = [];
+const employeesArr = [];
+
 // connect to the mysql database
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -93,5 +97,21 @@ const viewDepartments = () => {
         employeeTracker(); // returns back to available choices
     });
 }
+
+// view all roles, based on third option from prompt
+const viewRoles = () => {
+    rolesArr = []; // resets roles array so duplicate roles aren't added
+    const query = `SELECT role.title`; // selects title from role table
+    connection.query(query, (err, res) => {
+        if (err) throw err; // checks for error first
+        res.forEach(({ title }) => {
+            rolesArr.push(title); // updates the roles array to include all role titles
+            console.log('Viewing all Roles');
+            console.table(res); // generates visible table from data gathered
+            employeeTracker(); // returns back to available choices
+        });
+    });
+}
+
 // automatically opens up the employee tracker application upon starting
 employeeTracker();
