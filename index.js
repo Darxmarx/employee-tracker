@@ -1,25 +1,21 @@
 // import npm packages for usage
-const fs = require('fs');
 const mysql = require('mysql2');
 const cTable = require('console.table');
-const { default: inquirer } = require('inquirer');
+const inquirer = require('inquirer');
 
 // empty arrays for use when adding new roles and arrays later
-const rolesArr = [];
-const employeesArr = [];
-const deptArr = [];
+let rolesArr = [];
+let employeesArr = [];
 
 // connect to the mysql database
 const connection = mysql.createConnection({
-    host: 'localhost',
-    port: '3001',
     user: 'root',
     password: 'password',
     database: 'employee_db'
 });
 
 // function for initial prompt, asking user to make a choice between the features
-const employeeTracker = () => {
+function employeeTracker() {
     inquirer.prompt([
         {
             type: 'list',
@@ -38,7 +34,7 @@ const employeeTracker = () => {
             ]
         }
     ]).then((answer) => { // after user selects an answer from available choices...
-        switch (answer.employeeChoice) {
+        switch (answer.firstChoice) {
             // plays out specific functions based on which answer was chosen
             case 'View all Employees':
                 viewEmployees();
@@ -67,9 +63,6 @@ const employeeTracker = () => {
             case 'Update an Employee Role':
                 updateEmployeeRole();
                 break;
-
-            case 'Exit':
-                return;
         }
     });
 }
@@ -122,22 +115,22 @@ const addEmployee = () => {
     inquirer.prompt([ // prompt that has user fill in information for new employee
         {
             type: 'input',
-            message: "What is the employee's first name?",
+            message: "What is the Employee's first name?",
             name: 'firstName'
         },
         {
             type: 'input',
-            message: "What is the employee's last name?",
+            message: "What is the Employee's last name?",
             name: 'lastName'
         },
         {
             type: 'input',
-            message: "What is the employee's role ID?",
+            message: "What is the Employee's role ID?",
             name: 'roleId'
         },
         {
             type: 'input',
-            message: "What is the employee's manager's ID?",
+            message: "What is the Employee's manager's ID?",
             name: 'managerId'
         }
     ]).then((answers) => {
@@ -260,14 +253,9 @@ connection.query(query2, (err, res) => {
         rolesArr.push(title);
     });
 });
-deptArr = [];
-const query3 = `SELECT department.name`
-connection.query(query3, (err, res) => {
-    if (err) throw err;
-    res.forEach(({ name }) => {
-        rolesArr.push(name);
-    });
-});
 
-// automatically opens up the employee tracker application upon starting
-employeeTracker();
+// starts up the employeeTracker() immediately
+function startup() {
+    employeeTracker();
+}
+startup();
