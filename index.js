@@ -65,3 +65,21 @@ const employeeTracker = () => {
         }
     });
 }
+
+// view all employees, based on first option from prompt
+const viewEmployees = () => {
+    // selects all elements from the specified tables 
+    const query = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, CONCAT(manager.first_name,'', manager.last_name) AS manager
+    FROM employee 
+    LEFT JOIN employee manager ON manager.id = employee.manager_id
+    INNER JOIN role ON employee.role_id = role.id
+    INNER JOIN department ON department.id = role.department_id;`
+    connection.query(query, (err, res) => {
+        if (err) throw err; // checks for error first
+        console.log("Viewing all employees");
+        cTable(res); // generates visible table from data gathered
+        employeeTracker(); // returns back to available choices
+    });
+}
+// automatically opens up the employee tracker application upon starting
+employeeTracker();
