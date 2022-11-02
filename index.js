@@ -73,11 +73,23 @@ const viewEmployees = () => {
     FROM employee 
     LEFT JOIN employee manager ON manager.id = employee.manager_id
     INNER JOIN role ON employee.role_id = role.id
-    INNER JOIN department ON department.id = role.department_id;`
+    INNER JOIN department ON department.id = role.department_id`;
     connection.query(query, (err, res) => {
         if (err) throw err; // checks for error first
-        console.log("Viewing all employees");
+        console.log("Viewing all Employees");
         cTable(res); // generates visible table from data gathered
+        employeeTracker(); // returns back to available choices
+    });
+}
+
+// view all departments, based on second option from prompt
+const viewDepartments = () => {
+    // selects name from department table
+    const query = `SELECT department.name`;
+    connection.query(query, (err, res) => {
+        if (err) throw err; // checks for error first
+        console.log("Viewing all Departments");
+        console.table(res); // generates visible table from data gathered
         employeeTracker(); // returns back to available choices
     });
 }
