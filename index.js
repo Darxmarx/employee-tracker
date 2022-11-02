@@ -66,6 +66,9 @@ const employeeTracker = () => {
             case 'Update an Employee Role':
                 updateEmployeeRole();
                 break;
+
+            case 'Exit':
+                return;
         }
     });
 }
@@ -169,6 +172,40 @@ const addDepartment = () => {
             (err) => {
                 if (err) throw err; // checks for error first
                 console.log('Added new Department');
+                console.table(answers); // generates visible table from data gathered
+                employeeTracker(); // returns back to available choices
+            });
+    });
+}
+
+// add a new role to the database and generate a new roles table to reflect change
+const addRole = () => {
+    inquirer.prompt([ // prompt that asks user to create a role, and denote what the salary of that role is
+        {
+            type: 'input',
+            message: 'What Role will you add?',
+            name: 'newRole'
+        },
+        {
+            type: 'input',
+            message: "What is the Role's salary?",
+            name: 'salary'
+        },
+        {
+            type: 'input',
+            message: "What is the department ID that the Role belongs to?",
+            name: 'departmentId'
+        }
+    ]).then((answers) => {
+        connection.query(`INSERT INTO employee_Role SET ?`, // insert information from prompt into role table
+            {
+                title: answers.newRole,
+                salary: answers.salary,
+                department_id: answers.departmentId
+            },
+            (err) => {
+                if (err) throw err; // checks for error first
+                console.log('Added new Role');
                 console.table(answers); // generates visible table from data gathered
                 employeeTracker(); // returns back to available choices
             });
