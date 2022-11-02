@@ -113,5 +113,45 @@ const viewRoles = () => {
     });
 }
 
+// add a new employee to the database and generate a new employee table to reflect change
+const addEmployee = () => {
+    inquirer.prompt([ // prompt that has user fill in information for new employee
+        {
+            type: 'input',
+            message: "What is the employee's first name?",
+            name: 'firstName'
+        },
+        {
+            type: 'input',
+            message: "What is the employee's last name?",
+            name: 'lastName'
+        },
+        {
+            type: 'input',
+            message: "What is the employee's role ID?",
+            name: 'roleId'
+        },
+        {
+            type: 'input',
+            message: "What is the employee's manager's ID?",
+            name: 'managerId'
+        }
+    ]).then((answers) => {
+        connection.query(`INSERT INTO employee SET ?`, // insert information from prompt into table
+            {
+                first_name: answers.firstName,
+                last_name: answers.lastName,
+                role_id: answers.roleId,
+                manager_id: answers.managerId
+            },
+            (err) => {
+                if (err) throw err; // checks for error first
+                console.log('Added new Employee');
+                console.table(answers); // generates visible table from data gathered
+                employeeTracker(); // returns back to available choices
+            });
+    });
+}
+
 // automatically opens up the employee tracker application upon starting
 employeeTracker();
